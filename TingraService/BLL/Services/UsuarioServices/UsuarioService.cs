@@ -47,8 +47,8 @@ namespace TingraService.BLL.Services.UsuarioServices
                 {
                     return UsuarioErrors.NotExists;
                 }
-                var response = await _repository.Delete(model);
-                return Result.Success(response);
+                await _repository.Delete(model);
+                return Result.Success();
             }
             catch
             {
