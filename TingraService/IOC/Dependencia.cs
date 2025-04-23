@@ -1,4 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using TingraService.BLL.Services.Contract;
+using TingraService.BLL.Services.EmpresaServices;
+using TingraService.BLL.Services.PreguntaServices;
+using TingraService.BLL.Services.UsuarioServices;
 using TingraService.DAL;
 using TingraService.DAL.Contract;
 
@@ -29,6 +33,13 @@ namespace TingraService.IOC
             services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+            services.AddScoped<IUsuarioService, UsuarioService>();
+            services.AddScoped<PasswordService>();
+
+            services.AddScoped<IEmpresaService, EmpresaService>();
+            services.AddScoped<IPreguntaService, PreguntaService>();
+
 
             return services;
         }

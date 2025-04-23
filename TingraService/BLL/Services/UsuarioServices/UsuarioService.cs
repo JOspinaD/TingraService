@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using TingraService.BLL.Errors;
+using TingraService.BLL.Services.Contract;
 using TingraService.Common;
 using TingraService.DAL.Contract;
 using TingraService.DTO.Usuario;
@@ -7,11 +8,11 @@ using TingraService.Models;
 
 namespace TingraService.BLL.Services.UsuarioServices
 {
-    public class UsuarioService(IGenericRepository<Usuario> repository, IMapper mapper, PasswordService passwordService)
+    public class UsuarioService(IGenericRepository<Usuario> repository, IMapper mapper, PasswordService passwordService) : IUsuarioService
     {
         private readonly IGenericRepository<Usuario> _repository = repository;
         private readonly IMapper _mapper = mapper;
-        private readonly PasswordService _passwordService;
+        private readonly PasswordService _passwordService = passwordService;
 
         public async Task<Result<UsuarioReadDto>> CreateAsync(UsuarioWriteDto usuarioWriteDto)
         {
@@ -36,6 +37,7 @@ namespace TingraService.BLL.Services.UsuarioServices
 
         }
 
+
         public async Task<Result> DeleteAsync(Guid id)
         {
             try
@@ -45,8 +47,8 @@ namespace TingraService.BLL.Services.UsuarioServices
                 {
                     return UsuarioErrors.NotExists;
                 }
-                var response = await _repository.Delete(model);
-                return Result.Success(response);
+                await _repository.Delete(model);
+                return Result.Success();
             }
             catch
             {
@@ -110,8 +112,8 @@ namespace TingraService.BLL.Services.UsuarioServices
             catch
             {
                 return Result.Failure<UsuarioReadDto>(UsuarioErrors.Unhandled);
-
             }
         }
+
     }
 }
