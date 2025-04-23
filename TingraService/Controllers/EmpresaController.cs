@@ -14,7 +14,7 @@ namespace TingraService.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<EmpresaReadDto>>> GetAll()
         {
-            var result = await _service.GetAllAsync(Expression < Func<Empresa, bool>> (filter))
+            var result = await _service.GetAllAsync();
             return result.IsSuccess ? Ok(result.Value) : result.ToProblemDetails();
         }
 
