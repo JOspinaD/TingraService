@@ -8,7 +8,7 @@ namespace TingraService.Models
         public string Dirreccion { get; set; }
         public string? Telefono{ get; set; }
         public string? Email { get; set; }   
-        public virtual Pregunta? Pregunta { get; set; }
+        public virtual ICollection<Pregunta>? Pregunta { get; set; }
     }
 }
 
