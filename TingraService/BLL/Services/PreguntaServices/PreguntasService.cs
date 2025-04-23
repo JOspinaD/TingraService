@@ -5,9 +5,7 @@ using TingraService.BLL.Errors;
 using TingraService.BLL.Services.Contract;
 using TingraService.Common;
 using TingraService.DAL.Contract;
-using TingraService.DTO.Empresa;
 using TingraService.DTO.Pregunta;
-using TingraService.DTO.Usuario;
 using TingraService.Models;
 
 namespace TingraService.BLL.Services.PreguntaServices
@@ -29,6 +27,7 @@ namespace TingraService.BLL.Services.PreguntaServices
             catch (Exception ex)
             {
                 Console.WriteLine("---> ERROR: " + ex.Message);
+                return Result.Failure<IEnumerable<PreguntaReadDto>>(PreguntasErrors.Unhandled);
 
             }
         }
@@ -38,7 +37,7 @@ namespace TingraService.BLL.Services.PreguntaServices
             try
             {
                 var result = await _repository.GetAll(filter);
-                return Result.Success(_mapper.Map<IEnumerable<PreguntaReadDto>>(result.Include(r => r.IdEmpresa)));
+                return Result.Success(_mapper.Map<IEnumerable<PreguntaReadDto>>(result));
             }
             catch (Exception ex) 
             {

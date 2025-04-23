@@ -8,7 +8,7 @@ namespace TingraService.BLL.Services.Contract
 {
     public interface IPreguntaService
     {
-        Task<Result<IEnumerable<EmpresaReadDto>>> GetAllAsync();
+        Task<Result<IEnumerable<PreguntaReadDto>>> GetAllAsync();
         Task<Result<IEnumerable<PreguntaReadDto>>> GetAllAsync(Expression<Func<Pregunta, bool>> filter);
         Task<Result<PreguntaReadDto>> GetByIdAsync(Guid id);
         Task<int> CountAsync(Expression<Func<Pregunta, bool>> Filter);
