@@ -18,5 +18,10 @@ namespace TingraService.BLL.Errors
             "Usuario.Unhandled",
             "Error no controlado"
             );
+
+        public static readonly Error InvalidPassword = new(
+            "Usuario.InvalidCredentials",
+            "Credenciales invalidas"
+            );
     }
 }
