@@ -1,28 +1,35 @@
+using Microsoft.AspNetCore.Authentication;
 using TingraService.IOC;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+// Configuración existente
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("PoliticaApi", app =>
     {
         app.AllowAnyOrigin()
-        .AllowAnyMethod()
-        .AllowAnyHeader();
+           .AllowAnyMethod()
+           .AllowAnyHeader();
     });
 });
 
 builder.Services.AddControllers();
 builder.Services.AddControllersWithViews();
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 
 var tryDbConnection = Environment.GetEnvironmentVariable("ConnectionStrings__TingraDb") is not null || true;
 
 builder.Services.InyectarDependencias(builder.Configuration, builder.Environment, tryDbConnection);
 builder.Services.AddHealthChecks();
 
+
+
 var app = builder.Build();
+
 app.MapHealthChecks("/health");
 if (app.Environment.IsDevelopment())
 {
@@ -32,11 +39,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseCors("PoliticaApi");
 
-app.UseExceptionHandler();
-
+app.UseAuthentication(); 
 app.UseAuthorization();
 
 app.MapControllers();
@@ -44,6 +49,5 @@ app.MapControllers();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
 
 app.Run();

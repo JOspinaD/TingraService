@@ -10,7 +10,7 @@
         {
             if (isSuccess && error != null)
                 throw new ArgumentException("Success result cannot have an error.");
-            if (!isSuccess && error != null)
+            if (!isSuccess && error == null) 
                 throw new ArgumentException("Failure result must have an error.");
 
             IsSuccess = isSuccess;
