@@ -3,8 +3,6 @@ using TingraService.IOC;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configuración JWT
-builder.Services.Configure<JwtConfiguration>(builder.Configuration.GetSection("Jwt"));
 
 // Configuración existente
 builder.Services.AddCors(options =>
@@ -27,11 +25,6 @@ var tryDbConnection = Environment.GetEnvironmentVariable("ConnectionStrings__Tin
 
 builder.Services.InyectarDependencias(builder.Configuration, builder.Environment, tryDbConnection);
 builder.Services.AddHealthChecks();
-
-builder.Services.AddAuthentication("CustomJwt")
-    .AddScheme<AuthenticationSchemeOptions, CustomJwtHandler>(
-        "CustomJwt",
-        options => { });
 
 
 
