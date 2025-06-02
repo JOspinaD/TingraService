@@ -60,6 +60,7 @@ namespace TingraService.BLL.Services.UsuarioServices
                     return Result.Failure<LoginResponseDto>(UsuarioErrors.InvalidPassword);
                
                 var response = _mapper.Map<LoginResponseDto>(usuario);
+                response.Token = CreateToken(usuario);
                
 
                 return Result.Success(response);
@@ -79,12 +80,12 @@ namespace TingraService.BLL.Services.UsuarioServices
             };
 
             var key = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(configuration.GetValue<string>("AppSettings:Token")!));
+                Encoding.UTF8.GetBytes(configuration.GetValue<string>("Jwt:Key")!));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
             var tokenDescriptor = new JwtSecurityToken(
-                issuer: configuration.GetValue<string>("AppSettings:Issuer"),
-                audience: configuration.GetValue<string>("AppSettings:Audience"),
+                issuer: configuration.GetValue<string>("Jwt:Issuer"),
+                audience: configuration.GetValue<string>("Jwt:Audience"),
                 claims: claims,
                 expires: DateTime.UtcNow.AddDays(1),
                 signingCredentials: creds
