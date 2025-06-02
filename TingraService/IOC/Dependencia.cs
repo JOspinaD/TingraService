@@ -40,8 +40,6 @@ namespace TingraService.IOC
             services.AddScoped<IEmpresaService, EmpresaService>();
             services.AddScoped<IPreguntaService, PreguntaService>();
 
-            // Registrar configuración JWT desde appsettings.json
-            services.Configure<JwtConfiguration>(configuration.GetSection("Jwt"));
 
             return services;
         }
