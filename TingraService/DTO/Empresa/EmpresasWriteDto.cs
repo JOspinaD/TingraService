@@ -10,13 +10,13 @@
         public DateOnly? FechaCreacion { get; set; }
         public string? Servicios { get; set; }
         public string? RedesSociales { get; set; }
-        public bool PerteneceRedEmprendedores { get; set; }
-        public bool RedEmprendedoresConfirmada { get; set; }
+        public bool? PerteneceRedEmprendedores { get; set; }
+        public bool? RedEmprendedoresConfirmada { get; set; }
         public string? AspectosMejorar { get; set; }
         public string? Capacitadores { get; set; }
         public DateTime? FechaLlamada { get; set; }
         public string? Observaciones { get; set; }
         public string? Disponibilidad { get; set; }
-        public bool CapacitacionRecibida { get; set; }
+        public bool? CapacitacionRecibida { get; set; }
     }
 }
