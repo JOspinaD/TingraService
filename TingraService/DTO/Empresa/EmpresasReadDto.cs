@@ -9,7 +9,7 @@ namespace TingraService.DTO.Empresa
         public string? Telefono { get; set; }
         public string? Email { get; set; }
         public string? Propietario { get; set; }
-        public DateOnly? FechaCreacion { get; set; }
+        public DateTime? FechaCreacion { get; set; }
         public string? Servicios { get; set; }
         public string? RedesSociales { get; set; }
         public bool? PerteneceRedEmprendedores { get; set; }

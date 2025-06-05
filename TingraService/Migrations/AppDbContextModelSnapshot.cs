@@ -51,8 +51,8 @@ namespace TingraService.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateOnly?>("FechaCreacion")
-                        .HasColumnType("date");
+                    b.Property<DateTime?>("FechaCreacion")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("FechaLlamada")
                         .HasColumnType("datetime2");
