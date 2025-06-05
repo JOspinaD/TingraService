@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TingraService.Migrations
 {
     /// <inheritdoc />
-    public partial class NewFieldsEmpresa : Migration
+    public partial class NewFieldsEmpresaMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -26,8 +26,7 @@ namespace TingraService.Migrations
                 name: "CapacitacionRecibida",
                 table: "Empresa",
                 type: "bit",
-                nullable: false,
-                defaultValue: false);
+                nullable: true);
 
             migrationBuilder.AddColumn<string>(
                 name: "Capacitadores",
@@ -41,10 +40,10 @@ namespace TingraService.Migrations
                 type: "nvarchar(max)",
                 nullable: true);
 
-            migrationBuilder.AddColumn<DateOnly>(
+            migrationBuilder.AddColumn<DateTime>(
                 name: "FechaCreacion",
                 table: "Empresa",
-                type: "date",
+                type: "datetime2",
                 nullable: true);
 
             migrationBuilder.AddColumn<DateTime>(
@@ -63,8 +62,7 @@ namespace TingraService.Migrations
                 name: "PerteneceRedEmprendedores",
                 table: "Empresa",
                 type: "bit",
-                nullable: false,
-                defaultValue: false);
+                nullable: true);
 
             migrationBuilder.AddColumn<string>(
                 name: "Propietario",
@@ -76,8 +74,7 @@ namespace TingraService.Migrations
                 name: "RedEmprendedoresConfirmada",
                 table: "Empresa",
                 type: "bit",
-                nullable: false,
-                defaultValue: false);
+                nullable: true);
 
             migrationBuilder.AddColumn<string>(
                 name: "RedesSociales",

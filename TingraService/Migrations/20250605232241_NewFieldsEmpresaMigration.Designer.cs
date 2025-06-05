@@ -12,8 +12,8 @@ using TingraService.DAL;
 namespace TingraService.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250602232842_NewFieldsEmpresa")]
-    partial class NewFieldsEmpresa
+    [Migration("20250605232241_NewFieldsEmpresaMigration")]
+    partial class NewFieldsEmpresaMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,7 +34,7 @@ namespace TingraService.Migrations
                     b.Property<string>("AspectosMejorar")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("CapacitacionRecibida")
+                    b.Property<bool?>("CapacitacionRecibida")
                         .HasColumnType("bit");
 
                     b.Property<string>("Capacitadores")
@@ -54,8 +54,8 @@ namespace TingraService.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateOnly?>("FechaCreacion")
-                        .HasColumnType("date");
+                    b.Property<DateTime?>("FechaCreacion")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("FechaLlamada")
                         .HasColumnType("datetime2");
@@ -70,13 +70,13 @@ namespace TingraService.Migrations
                     b.Property<string>("Observaciones")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("PerteneceRedEmprendedores")
+                    b.Property<bool?>("PerteneceRedEmprendedores")
                         .HasColumnType("bit");
 
                     b.Property<string>("Propietario")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("RedEmprendedoresConfirmada")
+                    b.Property<bool?>("RedEmprendedoresConfirmada")
                         .HasColumnType("bit");
 
                     b.Property<string>("RedesSociales")
