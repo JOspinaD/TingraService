@@ -9,7 +9,7 @@ namespace TingraService.BLL.Services.Contract
         Task<Result<IEnumerable<UsuarioReadDto>>> GetAllAsync();
         Task<Result<UsuarioReadDto>> GetByIdAsync(Guid id);
         Task<Result<UsuarioReadDto>> CreateAsync(UsuarioWriteDto usuarioCreateDto);
-        Task<Result<LoginResponseDto>> LoginAsync(LoginDto loginDto);
+        Task<Result<TokenResponseDto>> LoginAsync(UsuarioWriteDto usuarioWriteDto);
         Task<Result<UsuarioReadDto>> UpdateAsync(Guid id, UsuarioWriteDto usuarioUpdateDto);
         Task<Result> DeleteAsync(Guid id);
     }

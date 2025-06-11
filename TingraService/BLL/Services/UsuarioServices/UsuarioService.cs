@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using Azure.Core;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using TingraService.BLL.Errors;
 using TingraService.BLL.Services.Contract;
@@ -41,35 +43,56 @@ namespace TingraService.BLL.Services.UsuarioServices
 
         }
 
-        public async Task<Result<LoginResponseDto>> LoginAsync(LoginDto loginDto)
+        public async Task<Result<TokenResponseDto>> LoginAsync(UsuarioWriteDto usuarioWriteDto)
         {
             try
             {
-                var usuario = await _repository.GetBy(t => t.Correo == loginDto.Correo);
+                var usuario = await _repository.GetBy(t => t.Correo == usuarioWriteDto.Correo);
 
                 if (usuario == null)
-                    return Result.Failure<LoginResponseDto>(UsuarioErrors.NotExists);
+                    return Result.Failure<TokenResponseDto>(UsuarioErrors.NotExists);
 
                 var isValid = _passwordService.verifyPassword(
-                    loginDto.Contraseña,
+                    usuarioWriteDto.HashContraseña,
                     usuario.HashContraseña,
                     usuario.Salt
                 );
 
                 if (!isValid)
-                    return Result.Failure<LoginResponseDto>(UsuarioErrors.InvalidPassword);
-               
-                var response = _mapper.Map<LoginResponseDto>(usuario);
-                response.Token = CreateToken(usuario);
-               
+                    return Result.Failure<TokenResponseDto>(UsuarioErrors.InvalidPassword);
+
+                var response = new TokenResponseDto
+                {
+                    AccessToken = CreateToken(usuario),
+                    RefreshToken = await GenerateAndSaveRefreshTokenAsync(usuario)
+                };
+
+
 
                 return Result.Success(response);
             }
             catch (Exception ex)
             {
                 Console.Out.WriteLine("--> ERROR: ", ex.Message);
-                return Result.Failure<LoginResponseDto>(UsuarioErrors.Unhandled);
+                return Result.Failure<TokenResponseDto>(UsuarioErrors.Unhandled);
             }
+        }
+
+        private string GenerateRefreshToken()
+        {
+            var randomNumber = new byte[32];
+            using var rng = RandomNumberGenerator.Create();
+            rng.GetBytes(randomNumber);
+            return Convert.ToBase64String(randomNumber);
+        }
+
+        private async Task<string> GenerateAndSaveRefreshTokenAsync(Usuario usuario)
+        {
+            var refreshToken = GenerateRefreshToken();
+            usuario.RefreshToken = refreshToken;
+            usuario.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+            await _repository.Update(usuario);
+            return refreshToken;
         }
 
         private string CreateToken(Usuario usuario)
