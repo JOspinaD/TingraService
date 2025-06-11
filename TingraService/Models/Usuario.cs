@@ -9,6 +9,8 @@ namespace TingraService.Models
         public string HashContraseña { get; set; }
         public string? Salt { get; set; }
         public string? Direccion { get; set; }
-        public string? Telefono { get; set; }
+        public string? Telefono { get; set; }   
+        public string? RefreshToken { get; set; }
+        public DateTime? RefreshTokenExpiryTime { get; set; }
     }
 }
