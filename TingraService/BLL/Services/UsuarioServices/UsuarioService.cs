@@ -81,6 +81,15 @@ namespace TingraService.BLL.Services.UsuarioServices
             return Convert.ToBase64String(randomNumber);
         }
 
+        private async Task<string> GenerateAndSaveRefreshTokenAsync(Usuario usuario)
+        {
+            var refreshToken = GenerateRefreshToken();
+            usuario.RefreshToken = refreshToken;
+            usuario.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+            await _repository.Update(usuario);
+            return refreshToken;
+        }
+
         private string CreateToken(Usuario usuario)
         {
             var claims = new List<Claim>
