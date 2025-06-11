@@ -2,6 +2,7 @@
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using TingraService.BLL.Errors;
 using TingraService.BLL.Services.Contract;
@@ -70,6 +71,14 @@ namespace TingraService.BLL.Services.UsuarioServices
                 Console.Out.WriteLine("--> ERROR: ", ex.Message);
                 return Result.Failure<LoginResponseDto>(UsuarioErrors.Unhandled);
             }
+        }
+
+        private string GenerateRefreshToken()
+        {
+            var randomNumber = new byte[32];
+            using var rng = RandomNumberGenerator.Create();
+            rng.GetBytes(randomNumber);
+            return Convert.ToBase64String(randomNumber);
         }
 
         private string CreateToken(Usuario usuario)
