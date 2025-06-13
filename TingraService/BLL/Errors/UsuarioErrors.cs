@@ -23,5 +23,10 @@ namespace TingraService.BLL.Errors
             "Usuario.InvalidCredentials",
             "Credenciales invalidas"
             );
+
+        public static readonly Error InvalidRefreshToken = new(
+            "Usuario.InvalidRefreshToken",
+            "El refresh token es inválido o ha expirado"
+            );
     }
 }

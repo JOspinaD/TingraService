@@ -37,7 +37,7 @@ namespace TingraService.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginDto loginDto)
+        public async Task<ActionResult<TokenResponseDto>> Login(LoginDto loginDto)
         {
             if (loginDto == null)
                 return BadRequest("Datos inválidos");
