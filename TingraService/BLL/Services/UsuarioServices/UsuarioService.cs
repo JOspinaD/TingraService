@@ -103,11 +103,7 @@ namespace TingraService.BLL.Services.UsuarioServices
                 if (usuario is null)
                     return Result.Failure<TokenResponseDto>(UsuarioErrors.InvalidRefreshToken);
 
-                var response = new TokenResponseDto
-                {
-                    AccessToken = CreateToken(usuario),
-                    RefreshToken = await GenerateAndSaveRefreshTokenAsync(usuario)
-                };
+                var response = await CreateTokenResponseAsync(usuario);
 
                 return Result.Success(response);
             }
