@@ -43,17 +43,17 @@ namespace TingraService.BLL.Services.UsuarioServices
 
         }
 
-        public async Task<Result<TokenResponseDto>> LoginAsync(UsuarioWriteDto usuarioWriteDto)
+        public async Task<Result<TokenResponseDto>> LoginAsync(LoginDto loginDto)
         {
             try
             {
-                var usuario = await _repository.GetBy(t => t.Correo == usuarioWriteDto.Correo);
+                var usuario = await _repository.GetBy(t => t.Correo == loginDto.Correo);
 
                 if (usuario == null)
                     return Result.Failure<TokenResponseDto>(UsuarioErrors.NotExists);
 
                 var isValid = _passwordService.verifyPassword(
-                    usuarioWriteDto.HashContraseña,
+                    loginDto.Contraseña,
                     usuario.HashContraseña,
                     usuario.Salt
                 );
@@ -78,12 +78,51 @@ namespace TingraService.BLL.Services.UsuarioServices
             }
         }
 
+        private async Task<TokenResponseDto> CreateTokenResponseAsync(Usuario usuario)
+        {
+            return new TokenResponseDto
+            {
+                AccessToken = CreateToken(usuario),
+                RefreshToken = await GenerateAndSaveRefreshTokenAsync(usuario)
+            };
+        }
+
         private string GenerateRefreshToken()
         {
             var randomNumber = new byte[32];
             using var rng = RandomNumberGenerator.Create();
             rng.GetBytes(randomNumber);
             return Convert.ToBase64String(randomNumber);
+        }
+
+        public async Task<Result<TokenResponseDto>> RefreshTokenAsync(RefreshTokenRequestDto request)
+        {
+            try
+            {
+                var usuario = await validateRefreshTokenAsync(request.UsuarioId, request.RefreshToken);
+                if (usuario is null)
+                    return Result.Failure<TokenResponseDto>(UsuarioErrors.InvalidRefreshToken);
+
+                var response = await CreateTokenResponseAsync(usuario);
+
+                return Result.Success(response);
+            }
+            catch (Exception ex)
+            {
+                Console.Out.WriteLine("--> ERROR: " + ex.Message);
+                return Result.Failure<TokenResponseDto>(UsuarioErrors.Unhandled);
+            }
+        }
+
+        private async Task<Usuario?> validateRefreshTokenAsync(Guid usaurioId, string refreshToken)
+        {
+            var usuario = await _repository.GetBy(t => t.Id == usaurioId && t.RefreshToken == refreshToken);
+            if (usuario is null || usuario.RefreshToken != refreshToken || usuario.RefreshTokenExpiryTime <= DateTime.UtcNow)
+            {
+                return null;
+            }
+
+            return usuario;
         }
 
         private async Task<string> GenerateAndSaveRefreshTokenAsync(Usuario usuario)
