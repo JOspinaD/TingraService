@@ -49,6 +49,15 @@ namespace TingraService.Controllers
                 : result.ToProblemDetails();
         }
 
+        [HttpPost("refresh-token")]
+        public async Task<ActionResult<TokenResponseDto>> RefreshToken(RefreshTokenRequestDto request)
+        {
+            var result = await _service.RefreshTokenAsync(request);
+            return result.IsSuccess
+                ? Ok(result.Value)
+                : result.ToProblemDetails();
+        }
+
         [HttpPut("{id}")]
         public async Task<ActionResult<UsuarioReadDto>> Put(Guid id, UsuarioWriteDto usuarioWriteDto)
         {
